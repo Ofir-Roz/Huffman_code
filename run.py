@@ -19,7 +19,8 @@ def main() -> None:
     config[config_name].init_app(app)
     
     # Run the application
-    host = os.environ.get('HOST', '127.0.0.1')
+    # Use 0.0.0.0 for production to allow external connections (required by Render)
+    host = '0.0.0.0' if config_name == 'production' else os.environ.get('HOST', '127.0.0.1')
     port = int(os.environ.get('PORT', 5000))
     debug = config_name == 'development'
     

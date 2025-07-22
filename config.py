@@ -43,23 +43,23 @@ class ProductionConfig(Config):
         
         # Production-specific initialization
         import logging
-        from logging.handlers import RotatingFileHandler
+        import os
         
         if not app.debug and not app.testing:
-            # Set up file logging
-            file_handler = RotatingFileHandler(
-                'logs/huffman_app.log',
-                maxBytes=10240000,
-                backupCount=10
-            )
-            file_handler.setFormatter(logging.Formatter(
+            # For cloud platforms like Render, use console logging instead of file logging
+            # since the filesystem is often read-only
+            
+            # Set up console logging with proper formatting
+            import sys
+            console_handler = logging.StreamHandler(sys.stdout)
+            console_handler.setFormatter(logging.Formatter(
                 '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
             ))
-            file_handler.setLevel(logging.INFO)
-            app.logger.addHandler(file_handler)
+            console_handler.setLevel(logging.INFO)
+            app.logger.addHandler(console_handler)
             
             app.logger.setLevel(logging.INFO)
-            app.logger.info('Huffman Coding app startup')
+            app.logger.info('Huffman Coding app startup - Production mode')
 
 
 class TestingConfig(Config):
