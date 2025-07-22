@@ -4,7 +4,8 @@
 let currentData = {
     encoded: '',
     frequency_table: [],
-    huffmanCodes: []
+    huffmanCodes: [],
+    operation: 'encode' // Track current operation
 };
 
 /**
@@ -71,7 +72,8 @@ async function encodeText() {
         }
 
         currentData = data;
-        displayResults(data);
+        currentData.operation = 'encode';
+        displayEncodeResults(data);
         showMessage('Text encoded successfully!', 'success');
         
     } catch (error) {
@@ -110,7 +112,8 @@ async function decodeText() {
             throw new Error(data.error || 'Decoding failed');
         }
 
-        document.getElementById('inputText').value = data.decoded;
+        currentData.operation = 'decode';
+        displayDecodeResults(data);
         showMessage('Text decoded successfully!', 'success');
         
     } catch (error) {
@@ -124,9 +127,10 @@ async function decodeText() {
  * Display encoding results in the UI
  * @param {Object} data - Response data from encoding API
  */
-function displayResults(data) {
-    // Display encoded text
-    document.getElementById('encodedOutput').textContent = data.encoded;
+function displayEncodeResults(data) {
+    // Update title and display encoded binary
+    document.getElementById('outputTitle').textContent = '💻 Encoded Output';
+    document.getElementById('outputContent').textContent = data.encoded;
 
     // Show copy button
     document.getElementById('copyToInputBtn').style.display = 'block';
@@ -165,11 +169,30 @@ function displayResults(data) {
 }
 
 /**
+ * Display decoding results in the UI
+ * @param {Object} data - Response data from decoding API
+ */
+function displayDecodeResults(data) {
+    // Update title and display decoded text
+    document.getElementById('outputTitle').textContent = '🔓 Decoded Output';
+    document.getElementById('outputContent').textContent = data.decoded;
+
+    // Show copy button
+    document.getElementById('copyToInputBtn').style.display = 'block';
+
+    // Hide statistics and tables for decode operation
+    document.getElementById('statsSection').style.display = 'none';
+    document.getElementById('frequencyTable').style.display = 'none';
+    document.getElementById('codesTable').style.display = 'none';
+}
+
+/**
  * Clear all data and reset the interface
  */
 function clearAll() {
     document.getElementById('inputText').value = '';
-    document.getElementById('encodedOutput').textContent = 'Encoded binary will appear here...';
+    document.getElementById('outputTitle').textContent = '💻 Output';
+    document.getElementById('outputContent').textContent = 'Results will appear here...';
     document.getElementById('copyToInputBtn').style.display = 'none';
     document.getElementById('frequencyTable').style.display = 'none';
     document.getElementById('codesTable').style.display = 'none';
@@ -178,22 +201,28 @@ function clearAll() {
     currentData = {
         encoded: '',
         frequency_table: [],
-        huffmanCodes: []
+        huffmanCodes: [],
+        operation: 'encode'
     };
     
     showMessage('All data cleared!', 'success');
 }
 
 /**
- * Copy encoded text to input field for easy testing
+ * Copy current output text to input field for easy testing
  */
-function copyEncodedToInput() {
-    const encodedText = document.getElementById('encodedOutput').textContent;
+function copyToInput() {
+    const outputContent = document.getElementById('outputContent').textContent;
     
-    if (encodedText && encodedText !== 'Encoded binary will appear here...') {
-        document.getElementById('inputText').value = encodedText;
-        showMessage('Encoded text copied to input!', 'success');
+    if (outputContent && outputContent !== 'Results will appear here...') {
+        document.getElementById('inputText').value = outputContent;
+        
+        if (currentData.operation === 'encode') {
+            showMessage('Encoded text copied to input!', 'success');
+        } else {
+            showMessage('Decoded text copied to input!', 'success');
+        }
     } else {
-        showMessage('No encoded text to copy!', 'error');
+        showMessage('No output to copy!', 'error');
     }
 }

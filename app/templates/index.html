@@ -4,7 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huffman Coding Compressor</title>
+    <title>Huffman Coding Compressor - Text Compression Algorithm</title>
+    <meta name="description" content="Interactive web application for text compression using the Huffman coding algorithm. Encode, decode, and analyze compression statistics in real-time.">
+    <meta name="keywords" content="Huffman coding, text compression, algorithm, binary tree, encoding, decoding">
+    <meta name="author" content="Ofir Roz">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.svg') }}">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
@@ -50,11 +60,11 @@ and LinkedIn: Ofir Rozanes
 
             <!-- Output Section -->
             <div class="section">
-                <h3>💻 Encoded Output</h3>
-                <div class="code-display" id="encodedOutput">Encoded binary will appear here...</div>
+                <h3 id="outputTitle">💻 Output</h3>
+                <div class="code-display" id="outputContent">Results will appear here...</div>
 
                 <!-- Copy to Input Button -->
-                <button class="copy-btn" id="copyToInputBtn" onclick="copyEncodedToInput()" style="display: none;">
+                <button class="copy-btn" id="copyToInputBtn" onclick="copyToInput()" style="display: none;">
                     📋 Copy to Input
                 </button>
 
