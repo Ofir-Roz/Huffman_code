@@ -9,7 +9,7 @@ A modern, full-stack web application implementing the Huffman coding algorithm f
 
 ## 🌐 Live Demo
 
-**🚀 [Try it live on Render](https://your-render-url.onrender.com)** *(Add your actual URL here)*
+**🚀 [Try it live on Render](https://huffman-coding-app.onrender.com)**
 
 ## ✨ Features
 
@@ -237,7 +237,7 @@ pytest tests/test_huffman.py -v
 
 ## 🚀 Deployment
 
-### Render (Recommended)
+### Render
 This application is optimized for deployment on Render:
 
 1. **Fork/Clone** this repository
@@ -271,21 +271,6 @@ Repetitive         | 1000 bits     | 250 bits        | 75%
 English Literature | 8000 bits     | 4800 bits       | 40%
 Technical Document | 5000 bits     | 3200 bits       | 36%
 ```
-
-## 🤝 Contributing
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Make** your changes with tests
-4. **Ensure** code quality (`black .`, `flake8`, `mypy .`)
-5. **Run** the test suite (`pytest`)
-6. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-7. **Push** to the branch (`git push origin feature/amazing-feature`)
-8. **Open** a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
@@ -414,43 +399,3 @@ SECRET_KEY=your-secret-key-here
 HOST=127.0.0.1
 PORT=5000
 ```
-
-## 📚 Algorithm Overview
-
-The Huffman coding algorithm works in these steps:
-
-1. **Frequency Analysis**: Count character occurrences in input text
-2. **Tree Construction**: Build binary tree using priority queue (greedy algorithm)
-3. **Code Generation**: Assign shorter codes to more frequent characters
-4. **Encoding**: Replace characters with their binary codes
-5. **Decoding**: Use tree to convert binary codes back to characters
-
-### Time Complexity
-- Building tree: O(n log n) where n is number of unique characters
-- Encoding: O(m) where m is text length
-- Decoding: O(m) where m is encoded length
-
-### Space Complexity
-- Tree storage: O(n) for n unique characters
-- Code table: O(n) for n unique characters
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Run tests and quality checks
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Huffman coding algorithm by David A. Huffman (1952)
-- Flask web framework
-- Modern Python development practices
-- Beautiful UI inspired by modern web design
