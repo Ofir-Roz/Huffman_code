@@ -13,9 +13,9 @@ def generate_text(length: int, char_distribution: str = "uniform") -> str:
         return ''.join(random.choices(string.ascii_lowercase + ' ', k=length))
     
     elif char_distribution == "english":
-        # Simulate English text frequency
+        # Simulate English text frequency (characters ordered by frequency in English)
         chars = 'etaoinshrdlcumwfgypbvkjxqz '
-        weights = [12.7, 9.1, 8.2, 7.5, 7.0, 6.3, 6.1, 6.0, 5.9, 4.3, 4.0, 2.8, 2.8, 2.4, 2.4, 2.0, 2.0, 1.9, 1.5, 1.3, 1.0, 0.15, 0.15, 0.10, 18.0]
+        weights = [12.7, 9.1, 8.2, 7.5, 7.0, 6.3, 6.1, 6.0, 5.9, 4.3, 4.0, 2.8, 2.8, 2.4, 2.4, 2.0, 2.0, 1.9, 1.5, 1.3, 1.0, 0.15, 0.15, 0.10, 0.07, 0.05, 18.0]
         return ''.join(random.choices(chars, weights=weights, k=length))
     
     elif char_distribution == "repetitive":

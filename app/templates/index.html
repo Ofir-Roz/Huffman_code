@@ -118,6 +118,16 @@
             color: white;
         }
 
+        .copy-btn {
+            background: #f39c12;
+            color: white;
+            margin-top: 10px;
+            width: auto;
+            flex: none;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -267,7 +277,11 @@
                 <textarea id="inputText" placeholder="Enter your text here to encode...">This is a sample text file for testing Huffman coding.
 It contains various characters and repeated patterns.
 The quick brown fox jumps over the lazy dog.
-AAAAAAA BBBBB CCC DD E</textarea>
+AAAAAAA BBBBB CCC DD E
+
+Make sure to follow me on GitHub: Ofir-Roz
+and LinkedIn: Ofir Rozanes
+</textarea>
                 
                 <div class="button-group">
                     <button class="encode-btn" onclick="encodeText()">🔒 Encode</button>
@@ -293,6 +307,11 @@ AAAAAAA BBBBB CCC DD E</textarea>
             <div class="section">
                 <h3>💻 Encoded Output</h3>
                 <div class="code-display" id="encodedOutput">Encoded binary will appear here...</div>
+                
+                <!-- Copy to Input Button -->
+                <button class="copy-btn" id="copyToInputBtn" onclick="copyEncodedToInput()" style="display: none;">
+                    📋 Copy to Input
+                </button>
                 
                 <!-- Statistics -->
                 <div class="stats" id="statsSection" style="display: none;">
@@ -332,7 +351,7 @@ AAAAAAA BBBBB CCC DD E</textarea>
     <script>
         let currentData = {
             encoded: '',
-            frequencyTable: [],
+            frequency_table: [],
             huffmanCodes: []
         };
 
@@ -398,7 +417,7 @@ AAAAAAA BBBBB CCC DD E</textarea>
         }
 
         async function decodeText() {
-            if (!currentData.encoded || !currentData.frequencyTable) {
+            if (!currentData.encoded || !currentData.frequency_table) {
                 showMessage('No encoded data available. Please encode some text first!', 'error');
                 return;
             }
@@ -413,7 +432,7 @@ AAAAAAA BBBBB CCC DD E</textarea>
                     },
                     body: JSON.stringify({
                         encoded: currentData.encoded,
-                        frequency_table: currentData.frequencyTable
+                        frequency_table: currentData.frequency_table
                     })
                 });
 
@@ -436,6 +455,9 @@ AAAAAAA BBBBB CCC DD E</textarea>
         function displayResults(data) {
             // Display encoded text
             document.getElementById('encodedOutput').textContent = data.encoded;
+
+            // Show copy button
+            document.getElementById('copyToInputBtn').style.display = 'block';
 
             // Display statistics
             const stats = data.stats;
@@ -473,17 +495,29 @@ AAAAAAA BBBBB CCC DD E</textarea>
         function clearAll() {
             document.getElementById('inputText').value = '';
             document.getElementById('encodedOutput').textContent = 'Encoded binary will appear here...';
+            document.getElementById('copyToInputBtn').style.display = 'none';
             document.getElementById('frequencyTable').style.display = 'none';
             document.getElementById('codesTable').style.display = 'none';
             document.getElementById('statsSection').style.display = 'none';
             
             currentData = {
                 encoded: '',
-                frequencyTable: [],
+                frequency_table: [],
                 huffmanCodes: []
             };
             
             showMessage('All data cleared!', 'success');
+        }
+
+        function copyEncodedToInput() {
+            const encodedText = document.getElementById('encodedOutput').textContent;
+            
+            if (encodedText && encodedText !== 'Encoded binary will appear here...') {
+                document.getElementById('inputText').value = encodedText;
+                showMessage('Encoded text copied to input!', 'success');
+            } else {
+                showMessage('No encoded text to copy!', 'error');
+            }
         }
     </script>
 </body>
