@@ -136,6 +136,89 @@ class HuffmanCoding:
             self._generate_codes(node.left, code + "0")
             self._generate_codes(node.right, code + "1")
     
+    def _serialize_tree(self, node: Optional[Node], x: float = 0, y: float = 0, 
+                       level: int = 0, side: str = "", width_factor: float = 200) -> Dict[str, Any]:
+        """
+        Serialize tree structure for visualization.
+        
+        Args:
+            node: Current node to serialize
+            x: X coordinate for positioning
+            y: Y coordinate for positioning
+            level: Current tree level (depth)
+            side: Which side of parent ('left' or 'right')
+            width_factor: Spacing factor for horizontal positioning
+            
+        Returns:
+            Dictionary representation of the tree structure
+        """
+        if not node:
+            return {}
+        
+        # Calculate horizontal spacing for more compact, cubic layout
+        spacing = width_factor / (2.2 ** (level + 1))
+        spacing = max(spacing, 30)  # Reduced minimum spacing for more compact layout
+        
+        result = {
+            'id': f"node_{id(node)}",
+            'x': x,
+            'y': y,
+            'level': level,
+            'side': side,
+            'frequency': node.freq,
+            'is_leaf': node.is_leaf,
+            'char': node.char if node.is_leaf else None,
+            'code': self._codes.get(node.char, '') if node.is_leaf else '',
+            'children': []
+        }
+        
+        # Add children if internal node
+        if not node.is_leaf:
+            left_x = x - spacing
+            right_x = x + spacing
+            child_y = y + 75  # Slightly reduced for more cubic proportions
+            
+            if node.left:
+                left_child = self._serialize_tree(node.left, left_x, child_y, 
+                                                level + 1, 'left', width_factor)
+                if left_child:
+                    result['children'].append(left_child)
+            
+            if node.right:
+                right_child = self._serialize_tree(node.right, right_x, child_y, 
+                                                 level + 1, 'right', width_factor)
+                if right_child:
+                    result['children'].append(right_child)
+        
+        return result
+
+    def get_tree_structure(self) -> Dict[str, Any]:
+        """
+        Get the tree structure for visualization.
+        
+        Returns:
+            Dictionary containing the complete tree structure
+        """
+        if not hasattr(self, '_root') or not self._root:
+            return {}
+        
+        # Calculate tree width for more cubic layout - less wide, more proportional
+        leaf_count = self._count_leaf_nodes(self._root)
+        tree_width = min(1000, max(600, leaf_count * 60))
+        
+        return self._serialize_tree(self._root, tree_width / 2, 50, 0, "", tree_width * 0.6)
+    
+    def _count_leaf_nodes(self, node: Optional[Node]) -> int:
+        """Count the number of leaf nodes in the tree."""
+        if not node:
+            return 0
+        if node.is_leaf:
+            return 1
+        
+        left_count = self._count_leaf_nodes(node.left) if node.left else 0
+        right_count = self._count_leaf_nodes(node.right) if node.right else 0
+        return left_count + right_count
+    
     def encode(self, text: str) -> Tuple[str, Dict[str, int]]:
         """
         Encode text using Huffman coding.
@@ -159,6 +242,10 @@ class HuffmanCoding:
             # Handle single character case
             if len(freq_table) == 1:
                 char = next(iter(freq_table))
+                freq = freq_table[char]
+                # Create a single leaf node as root for visualization
+                from .node import Node
+                self._root = Node(char=char, freq=freq)
                 self._codes = {char: "0"}
                 return "0" * len(text), freq_table
             

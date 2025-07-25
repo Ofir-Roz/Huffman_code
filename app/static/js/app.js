@@ -166,6 +166,12 @@ function displayEncodeResults(data) {
         codesTableBody.appendChild(row);
     });
     document.getElementById('codesTable').style.display = 'block';
+    
+    // Display Huffman tree visualization
+    if (data.tree_structure && Object.keys(data.tree_structure).length > 0) {
+        renderHuffmanTree(data.tree_structure);
+        document.getElementById('treeSection').style.display = 'block';
+    }
 }
 
 /**
@@ -197,6 +203,7 @@ function clearAll() {
     document.getElementById('frequencyTable').style.display = 'none';
     document.getElementById('codesTable').style.display = 'none';
     document.getElementById('statsSection').style.display = 'none';
+    document.getElementById('treeSection').style.display = 'none';
     
     currentData = {
         encoded: '',
@@ -224,5 +231,164 @@ function copyToInput() {
         }
     } else {
         showMessage('No output to copy!', 'error');
+    }
+}
+
+/**
+ * Render the Huffman tree visualization using SVG
+ * @param {Object} treeData - Tree structure data from the backend
+ */
+function renderHuffmanTree(treeData) {
+    const svg = document.getElementById('treeCanvas');
+    const container = svg.parentElement;
+    
+    // Clear previous tree
+    svg.innerHTML = '';
+    
+    if (!treeData || Object.keys(treeData).length === 0) {
+        return;
+    }
+    
+    // Calculate tree dimensions for more cubic layout
+    const maxDepth = calculateTreeDepth(treeData);
+    const leafCount = countLeafNodes(treeData);
+    
+    // More balanced dimensions - less wide, more proportional
+    const treeWidth = Math.min(1000, Math.max(600, leafCount * 60));
+    const treeHeight = Math.max(400, maxDepth * 80);
+    
+    // Set SVG dimensions
+    svg.setAttribute('width', treeWidth);
+    svg.setAttribute('height', treeHeight);
+    svg.setAttribute('viewBox', `0 0 ${treeWidth} ${treeHeight}`);
+    
+    // Render the tree recursively
+    renderTreeNode(svg, treeData);
+}
+
+/**
+ * Calculate the maximum depth of the tree
+ * @param {Object} node - Tree node
+ * @returns {number} Maximum depth
+ */
+function calculateTreeDepth(node) {
+    if (!node || !node.children || node.children.length === 0) {
+        return 1;
+    }
+    
+    let maxChildDepth = 0;
+    node.children.forEach(child => {
+        maxChildDepth = Math.max(maxChildDepth, calculateTreeDepth(child));
+    });
+    
+    return 1 + maxChildDepth;
+}
+
+/**
+ * Count the number of leaf nodes in the tree
+ * @param {Object} node - Tree node
+ * @returns {number} Number of leaf nodes
+ */
+function countLeafNodes(node) {
+    if (!node) {
+        return 0;
+    }
+    
+    if (!node.children || node.children.length === 0) {
+        return 1;
+    }
+    
+    let leafCount = 0;
+    node.children.forEach(child => {
+        leafCount += countLeafNodes(child);
+    });
+    
+    return leafCount;
+}
+
+/**
+ * Render a single tree node and its children
+ * @param {SVGElement} svg - SVG container
+ * @param {Object} node - Node data
+ */
+function renderTreeNode(svg, node) {
+    const nodeRadius = 25;
+    const x = node.x;
+    const y = node.y;
+    
+    // Draw connections to children first (so they appear behind nodes)
+    if (node.children && node.children.length > 0) {
+        node.children.forEach((child, index) => {
+            const childX = child.x;
+            const childY = child.y;
+            
+            // Draw line
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x);
+            line.setAttribute('y1', y);
+            line.setAttribute('x2', childX);
+            line.setAttribute('y2', childY);
+            line.setAttribute('class', 'tree-link');
+            svg.appendChild(line);
+            
+            // Draw edge label (0 for left, 1 for right)
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', (x + childX) / 2);
+            label.setAttribute('y', (y + childY) / 2 - 5);
+            label.setAttribute('class', 'tree-edge-label');
+            label.textContent = child.side === 'left' ? '0' : '1';
+            svg.appendChild(label);
+            
+            // Recursively draw child
+            renderTreeNode(svg, child);
+        });
+    }
+    
+    // Draw node circle
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', x);
+    circle.setAttribute('cy', y);
+    circle.setAttribute('r', nodeRadius);
+    circle.setAttribute('class', `tree-node ${node.is_leaf ? 'leaf' : ''}`);
+    
+    // Add hover title
+    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    if (node.is_leaf) {
+        title.textContent = `Character: "${node.char}" | Frequency: ${node.frequency} | Code: ${node.code}`;
+    } else {
+        title.textContent = `Internal Node | Frequency: ${node.frequency}`;
+    }
+    circle.appendChild(title);
+    
+    svg.appendChild(circle);
+    
+    // Draw node text
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', x);
+    text.setAttribute('y', y + 4);
+    text.setAttribute('class', 'tree-text');
+    
+    if (node.is_leaf) {
+        // Display character for leaf nodes
+        const displayChar = node.char === ' ' ? '␣' : 
+                          node.char === '\n' ? '\\n' : 
+                          node.char === '\t' ? '\\t' : 
+                          node.char;
+        text.textContent = displayChar;
+    } else {
+        // Display frequency for internal nodes
+        text.textContent = node.frequency;
+    }
+    
+    svg.appendChild(text);
+    
+    // Add frequency text below node for leaf nodes
+    if (node.is_leaf) {
+        const freqText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        freqText.setAttribute('x', x);
+        freqText.setAttribute('y', y + nodeRadius + 15);
+        freqText.setAttribute('class', 'tree-text frequency');
+        freqText.textContent = `f:${node.frequency}`;
+        svg.appendChild(freqText);
     }
 }

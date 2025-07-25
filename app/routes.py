@@ -41,6 +41,7 @@ def encode_text() -> tuple[Dict[str, Any], int]:
         huffman = HuffmanCoding()
         encoded, freq_table = huffman.encode(text)
         stats = huffman.get_compression_stats(text, encoded)
+        tree_structure = huffman.get_tree_structure()
         
         # Convert data for JSON serialization
         freq_list = [{'char': char, 'freq': freq} for char, freq in freq_table.items()]
@@ -50,6 +51,7 @@ def encode_text() -> tuple[Dict[str, Any], int]:
             'encoded': encoded,
             'frequency_table': freq_list,
             'huffman_codes': codes_list,
+            'tree_structure': tree_structure,
             'stats': {
                 'original_size': stats.original_size,
                 'compressed_size': stats.compressed_size,
