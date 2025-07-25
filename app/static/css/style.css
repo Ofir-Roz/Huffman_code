@@ -250,23 +250,32 @@ button:disabled {
     grid-column: 1 / -1;
 }
 
-/* Huffman Tree Visualization Styles */
-.tree-container {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 15px;
-    border: 2px solid #e9ecef;
+.tree-full-width h3 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
-.tree-info {
+/* Huffman Tree Visualization Styles */
+.tree-container {
+    margin-top: 15px;
+}
+
+.tree-container h3 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: #495057;
 }
 
-.tree-info p {
+.tree-container p {
+    text-align: center;
     margin: 5px 0;
+    color: #495057;
 }
 
 .tree-canvas-wrapper {
