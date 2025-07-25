@@ -5,15 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Huffman Coding Compressor - Text Compression Algorithm</title>
-    <meta name="description" content="Interactive web application for text compression using the Huffman coding algorithm. Encode, decode, and analyze compression statistics in real-time.">
+    <meta name="description"
+        content="Interactive web application for text compression using the Huffman coding algorithm. Encode, decode, and analyze compression statistics in real-time.">
     <meta name="keywords" content="Huffman coding, text compression, algorithm, binary tree, encoding, decoding">
     <meta name="author" content="Ofir Roz">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.svg') }}">
-    
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -30,13 +31,13 @@
             <div class="section">
                 <h3>📝 Input Text</h3>
                 <textarea id="inputText" placeholder="Enter your text here to encode...">This is a sample text file for testing Huffman coding.
-It contains various characters and repeated patterns.
-The quick brown fox jumps over the lazy dog.
-AAAAAAA BBBBB CCC DD E
+                It contains various characters and repeated patterns.
+                The quick brown fox jumps over the lazy dog.
+                AAAAAAA BBBBB CCC DD E
 
-Make sure to follow me on GitHub: Ofir-Roz
-and LinkedIn: Ofir Rozanes
-</textarea>
+                Make sure to follow me on GitHub: Ofir-Roz
+                and LinkedIn: Ofir Rozanes
+                </textarea>
 
                 <div class="button-group">
                     <button class="encode-btn" onclick="encodeText()">🔒 Encode</button>
