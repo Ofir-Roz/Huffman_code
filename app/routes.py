@@ -26,8 +26,12 @@ def encode_text() -> tuple[Dict[str, Any], int]:
         JSON response with encoded data or error
     """
     try:
+        # Handle missing or invalid JSON
+        if not request.is_json:
+            return {'error': 'Content-Type must be application/json'}, 400
+            
         data = request.get_json()
-        if not data:
+        if data is None:
             return {'error': 'No JSON data provided'}, 400
         
         text = data.get('text', '')

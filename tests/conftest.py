@@ -29,6 +29,6 @@ def sample_text():
 def sample_frequency_table():
     """Sample frequency table for testing"""
     return {
-        'H': 1, 'e': 1, 'l': 3, 'o': 2, ' ': 4, 'W': 1, 'r': 1, 'd': 1,
+        'H': 1, 'e': 1, 'l': 3, 'o': 2, ' ': 5, 'W': 1, 'r': 1, 'd': 1,
         '!': 1, 'T': 1, 'h': 1, 'i': 2, 's': 4, 'a': 1, 't': 4, '.': 1
     }

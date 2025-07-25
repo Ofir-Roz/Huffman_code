@@ -206,7 +206,7 @@ class HuffmanCoding:
             
             # Validate binary string
             if not all(bit in '01' for bit in encoded_text):
-                raise ValueError("Encoded text must contain only 0s and 1s")
+                raise DecodingError("Encoded text must contain only 0s and 1s")
             
             # Handle single character case
             if len(freq_table) == 1:

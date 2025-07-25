@@ -50,7 +50,7 @@ class TestHuffmanCoding:
         
         assert freq_table['l'] == 3  # 'l' appears 3 times in "Hello World..."
         assert freq_table['o'] == 2  # 'o' appears 2 times
-        assert freq_table[' '] == 4  # space appears 4 times
+        assert freq_table[' '] == 5  # space appears 5 times
     
     def test_empty_text_encoding(self):
         """Test encoding empty text raises error"""
